@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Currency</string>
+    <string name="base_currency">Base Currency</string>
+    <string name="target_currency">Target Currency</string>
+</resources>
