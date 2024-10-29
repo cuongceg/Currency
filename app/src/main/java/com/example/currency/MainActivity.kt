@@ -16,6 +16,7 @@ import com.example.currency.model.ApiResponse
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.util.Locale
 
 class MainActivity : AppCompatActivity() {
     private lateinit var amountInput: EditText
@@ -33,6 +34,7 @@ class MainActivity : AppCompatActivity() {
         targetCurrencySpinner = findViewById(R.id.targetCurrencySpinner)
         amountOutput = findViewById(R.id.amountOutput)
 
+        var isTextChanging = false
         val currencies = listOf("EUR", "USD", "JPY", "VND")
         val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, currencies)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
@@ -42,24 +44,28 @@ class MainActivity : AppCompatActivity() {
         amountInput.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                if(amountInput.text.isNotEmpty()){
-                    val amount = amountInput.text.toString().toDouble()
-                    val convertedAmount = amount * currency
-                    amountOutput.setText(convertedAmount.toString())
+                if (!isTextChanging) {
+                    isTextChanging = true
+                    updateAmountOutput()
+                    isTextChanging = false
                 }
             }
             override fun afterTextChanged(s: Editable?) {}
         })
 
-//        amountOutput.addTextChangedListener(object : TextWatcher {
-//            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-//            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-//                val amount = amountOutput.text.toString().toDouble()
-//                val convertedAmount = amount * 1/currency
-//                amountInput.setText(convertedAmount.toString())
-//            }
-//            override fun afterTextChanged(s: Editable?) {}
-//        })
+        amountOutput.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                if (!isTextChanging) {
+                    isTextChanging = true
+                    val amount = amountOutput.text.toString().toDoubleOrNull() ?: 0.0
+                    val convertedAmount = amount / currency
+                    amountInput.setText(String.format(Locale.ENGLISH,"%.0f", convertedAmount))
+                    isTextChanging = false
+                }
+            }
+            override fun afterTextChanged(s: Editable?) {}
+        })
 
         baseCurrencySpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
@@ -158,6 +164,6 @@ class MainActivity : AppCompatActivity() {
     private fun updateAmountOutput() {
         val amount = amountInput.text.toString().toDoubleOrNull() ?: 0.0
         val convertedAmount = amount * currency
-        amountOutput.setText(convertedAmount.toString())
+        amountOutput.setText(String.format(Locale.ENGLISH,"%.2f", convertedAmount))
     }
 }
