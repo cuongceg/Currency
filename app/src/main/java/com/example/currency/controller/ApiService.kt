@@ -15,15 +15,6 @@ interface ApiService {
 
     @GET("v3/latest?apikey=cur_live_7hwRQttMhJx5gtBVeUoJHeWbR2ebrn1dsQKOSTfP&currencies=JPY&base_currency=VND")
     fun getCurrencyDataFromVndToJpy(): Call<ApiResponse>
-
-    @GET("v3/latest?apikey=cur_live_7hwRQttMhJx5gtBVeUoJHeWbR2ebrn1dsQKOSTfP&currencies=VND&base_currency=EUR")
-    fun getCurrencyDataFromEurToVnd(): Call<ApiResponse>
-
-    @GET("v3/latest?apikey=cur_live_7hwRQttMhJx5gtBVeUoJHeWbR2ebrn1dsQKOSTfP&currencies=VND&base_currency=USD")
-    fun getCurrencyDataFromUsdToVnd(): Call<ApiResponse>
-
-    @GET("v3/latest?apikey=cur_live_7hwRQttMhJx5gtBVeUoJHeWbR2ebrn1dsQKOSTfP&currencies=VND&base_currency=JPY")
-    fun getCurrencyDataFromJpyToVnd(): Call<ApiResponse>
 }
 
 object RetrofitInstance {
